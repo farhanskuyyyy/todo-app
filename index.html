@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="dist/output.css" rel="stylesheet">
+    <title>Todo App</title>
+</head>
+<body>
+    <div class="container rounded-lg bg-sky-300 max-w-[480px] w-full mt-10 pt-4 px-4 pb-4">
+        <h1 class="font-bold text-2xl text-slate-900 text-center mb-6">Todo App</h1>
+        <section id="content">
+            <form id="form-input">
+                <div class="flex justify-center px-4 gap-2 ">
+                    <input type="text" class="rounded-sm w-3/4 p-2" id="input-task">
+                    <button class="rounded-lg w-1/4 bg-slate-900 text-white" id="btn-submit" type="submit">Add</button>
+                </div>
+            </form>
+
+            <h3 class="font-bold text-xl mt-6 px-4">List Tugas</h3>
+            <div id="task-list">
+                <!-- <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
+                    <div class="w-3/4">
+                        <input type="checkbox" name="list-1" id="list-1" class="hidden">
+                        <label class="cursor-pointer task" for="list-1" data-id="1">Ngerjain Tugas</label>
+                    </div>
+                    <div class="w-1/4 flex justify-end">
+                        <button class="bg-red-500 rounded-lg p-2 text-white">Del</button>
+                    </div>
+                </div>
+                <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
+                    <div class="w-3/4">
+                        <input type="checkbox" name="list-2" id="list-2" class="hidden">
+                        <label class="cursor-pointer task" for="list-2" data-id="2">Ngerjain PR</label>
+                    </div>
+                    <div class="w-1/4 flex justify-end">
+                        <button class="bg-red-500 rounded-lg p-2 text-white">Del</button>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+    </div>
+    <script>
+        let input;
+        let dataTask = [
+                {"key" : 1,"desc" : "Ngerjain Pr"},
+                {"key" : 2,"desc" : "Ngerjain Tugas"}
+            ];
+        loadData(dataTask);
+
+        const taskList = document.getElementById('task-list');
+        const formInput = document.getElementById('form-input');
+        formInput.addEventListener('submit',function(e){
+            e.preventDefault();
+            input = document.getElementById('input-task');
+            key = taskList.childElementCount + 1;
+            dataTask.push({"key" : key,"desc" : input.value})
+            input.value = '';
+            loadData(dataTask);
+        })
+
+        function loadData(dataTask){
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+            dataTask.forEach(value => {
+                taskList.innerHTML += `
+                    <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
+                        <div class="w-3/4">
+                            <input type="checkbox" name="list-${value.key}" id="list-${value.key}" class="hidden">
+                            <label class="cursor-pointer task" for="list-${value.key}" data-id="${value.key}">${value.desc}</label>
+                        </div>
+                        <div class="w-1/4 flex justify-end">
+                            <button class="bg-red-500 rounded-lg p-2 text-white">Del</button>
+                        </div>
+                    </div>
+                `;
+            });
+            loadEvent();
+        }
+
+        function loadEvent(){
+            const tasks = document.querySelectorAll('.task');
+            let checkTask,id;
+
+            tasks.forEach(task => {
+                task.addEventListener('click',function(){
+                    id = task.getAttribute('data-id');
+                    checkTask = document.querySelector(`#list-${id}`);
+                    if (checkTask.checked) {
+                        task.classList.remove('line-through');
+                    } else{
+                        task.classList.add('line-through');
+                    }
+                })
+            });
+        }
+    </script>
+</body>
+</html>
