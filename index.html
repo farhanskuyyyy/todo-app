@@ -20,24 +20,6 @@
 
             <h3 class="font-bold text-xl mt-6 px-4">List Tugas</h3>
             <div id="task-list">
-                <!-- <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
-                    <div class="w-3/4">
-                        <input type="checkbox" name="list-1" id="list-1" class="hidden">
-                        <label class="cursor-pointer task" for="list-1" data-id="1">Ngerjain Tugas</label>
-                    </div>
-                    <div class="w-1/4 flex justify-end">
-                        <button class="bg-red-500 rounded-lg p-2 text-white">Del</button>
-                    </div>
-                </div>
-                <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
-                    <div class="w-3/4">
-                        <input type="checkbox" name="list-2" id="list-2" class="hidden">
-                        <label class="cursor-pointer task" for="list-2" data-id="2">Ngerjain PR</label>
-                    </div>
-                    <div class="w-1/4 flex justify-end">
-                        <button class="bg-red-500 rounded-lg p-2 text-white">Del</button>
-                    </div>
-                </div> -->
             </div>
         </section>
     </div>
@@ -63,19 +45,23 @@
         function loadData(dataTask){
             const taskList = document.getElementById('task-list');
             taskList.innerHTML = '';
-            dataTask.forEach(value => {
-                taskList.innerHTML += `
-                    <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
-                        <div class="w-3/4">
-                            <input type="checkbox" name="list-${value.key}" id="list-${value.key}" class="hidden">
-                            <label class="cursor-pointer task" for="list-${value.key}" data-id="${value.key}">${value.desc}</label>
+            if (dataTask.length > 0) {
+                dataTask.forEach(value => {
+                    taskList.innerHTML += `
+                        <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
+                            <div class="w-3/4">
+                                <input type="checkbox" name="list-${value.key}" id="list-${value.key}" class="hidden">
+                                <label class="cursor-pointer task" for="list-${value.key}" data-id="${value.key}">${value.desc}</label>
+                            </div>
+                            <div class="w-1/4 flex justify-end">
+                                <button class="bg-red-500 rounded-lg p-2 text-white btn-remove" data-id="${value.key}"><img src="dist/trash.png" alt="" class="h-4 w-4"></button>
+                            </div>
                         </div>
-                        <div class="w-1/4 flex justify-end">
-                            <button class="bg-red-500 rounded-lg p-2 text-white">Del</button>
-                        </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }else{
+                taskList.innerHTML += `<p class="px-4 mt-4 text-md font-semibold ">No Data</p>`
+            }
             loadEvent();
         }
 
@@ -93,6 +79,18 @@
                         task.classList.add('line-through');
                     }
                 })
+            });
+
+            const removeButtons = document.querySelectorAll('.btn-remove');
+            let index;
+            removeButtons.forEach(btn => {
+                btn.addEventListener('click',function(){
+                    id = btn.getAttribute('data-id');
+                    index = dataTask.findIndex(task => task.key == id);
+                    console.log(index)
+                    dataTask.splice(index - 1, 1)
+                    loadData(dataTask)
+                });
             });
         }
     </script>
