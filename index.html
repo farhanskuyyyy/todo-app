@@ -46,6 +46,7 @@
             const taskList = document.getElementById('task-list');
             taskList.innerHTML = '';
             if (dataTask.length > 0) {
+                dataTask.sort().reverse();
                 dataTask.forEach(value => {
                     taskList.innerHTML += `
                         <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
@@ -53,7 +54,7 @@
                                 <input type="checkbox" name="list-${value.key}" id="list-${value.key}" class="hidden">
                                 <label class="cursor-pointer task" for="list-${value.key}" data-id="${value.key}">${value.desc}</label>
                             </div>
-                            <div class="w-1/4 flex justify-end">
+                            <div class="w-1/4 flex justify-end ">
                                 <button class="bg-red-500 rounded-lg p-2 text-white btn-remove" data-id="${value.key}"><img src="dist/trash.png" alt="" class="h-4 w-4"></button>
                             </div>
                         </div>
