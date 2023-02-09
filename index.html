@@ -26,8 +26,8 @@
     <script>
         let input;
         let dataTask = [
-                {"key" : 1,"desc" : "Ngerjain Pr"},
-                {"key" : 2,"desc" : "Ngerjain Tugas"}
+                // {"key" : 1,"desc" : "Ngerjain Pr"},
+                // {"key" : 2,"desc" : "Ngerjain Tugas"}
             ];
         loadData(dataTask);
 
@@ -49,13 +49,13 @@
                 dataTask.sort().reverse();
                 dataTask.forEach(value => {
                     taskList.innerHTML += `
-                        <div class="flex justify-center px-4 gap-2 mt-3 bg-slate-300 rounded-lg p-2">
+                        <div class="flex justify-center px-4 gap-2 mt-3 bg-white rounded-lg p-2">
                             <div class="w-3/4">
                                 <input type="checkbox" name="list-${value.key}" id="list-${value.key}" class="hidden">
                                 <label class="cursor-pointer task" for="list-${value.key}" data-id="${value.key}">${value.desc}</label>
                             </div>
                             <div class="w-1/4 flex justify-end ">
-                                <button class="bg-red-500 rounded-lg p-2 text-white btn-remove" data-id="${value.key}"><img src="dist/trash.png" alt="" class="h-4 w-4"></button>
+                                <button class="rounded-lg p-2 text-white btn-remove" data-id="${value.key}"><img src="dist/trash.png" alt="" class="h-4 w-4"></button>
                             </div>
                         </div>
                     `;
