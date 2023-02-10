@@ -8,26 +8,27 @@
     <title>Todo App</title>
 </head>
 <body>
-    <div class="container rounded-lg bg-sky-300 max-w-[480px] w-full mt-10 pt-4 px-4 pb-4">
-        <h1 class="font-bold text-2xl text-slate-900 text-center mb-6">Todo App</h1>
+    <div class="container bg-[#0f0e17] max-w-[480px] w-full pt-8 px-4 pb-4">
+        <h1 class="font-bold text-2xl text-[#a7a9be] text-center mb-6">Todo App</h1>
         <section id="content">
             <form id="form-input">
                 <div class="flex justify-center px-4 gap-2 ">
                     <input type="text" class="rounded-sm w-3/4 p-2" id="input-task">
-                    <button class="rounded-lg w-1/4 bg-slate-900 text-white" id="btn-submit" type="submit">Add</button>
+                    <button class="rounded-lg w-1/4 bg-[#ff8906] text-white" id="btn-submit" type="submit">Add</button>
                 </div>
             </form>
 
-            <h3 class="font-bold text-xl mt-6 px-4">List Tugas</h3>
+            <h3 class="font-bold text-xl mt-6 px-4 text-[#a7a9be]">List Tugas</h3>
             <div id="task-list">
             </div>
         </section>
     </div>
     <script>
         let input;
+        let key = 1; 
         let dataTask = [
-                // {"key" : 1,"desc" : "Ngerjain Pr"},
-                // {"key" : 2,"desc" : "Ngerjain Tugas"}
+                // {"key" : 1,"desc" : "Ngerjain Pr","completed" : false},
+                // {"key" : 2,"desc" : "Ngerjain Tugas","completed" : true}
             ];
         loadData(dataTask);
 
@@ -36,8 +37,9 @@
         formInput.addEventListener('submit',function(e){
             e.preventDefault();
             input = document.getElementById('input-task');
-            key = taskList.childElementCount + 1;
-            dataTask.push({"key" : key,"desc" : input.value})
+            // key = (taskList.childElementCount == 1) ? 1 :  taskList.childElementCount + 1;
+            dataTask.push({"key" : key,"desc" : input.value,"completed" : false})
+            key++;
             input.value = '';
             loadData(dataTask);
         })
@@ -46,13 +48,13 @@
             const taskList = document.getElementById('task-list');
             taskList.innerHTML = '';
             if (dataTask.length > 0) {
-                dataTask.sort().reverse();
+                dataTask.sort((a, b) => a.completed - b.completed);;
                 dataTask.forEach(value => {
                     taskList.innerHTML += `
                         <div class="flex justify-center px-4 gap-2 mt-3 bg-white rounded-lg p-2">
                             <div class="w-3/4">
-                                <input type="checkbox" name="list-${value.key}" id="list-${value.key}" class="hidden">
-                                <label class="cursor-pointer task" for="list-${value.key}" data-id="${value.key}">${value.desc}</label>
+                                <input type="checkbox" name="list-${value.key}" id="list-${value.key}" class="hidden" ${(value.completed) ? 'checked' : ''}>
+                                <label class="cursor-pointer task ${(value.completed) ? 'line-through' : ''}" for="list-${value.key}" data-id="${value.key}">${value.desc}</label>
                             </div>
                             <div class="w-1/4 flex justify-end ">
                                 <button class="rounded-lg p-2 text-white btn-remove" data-id="${value.key}"><img src="dist/trash.png" alt="" class="h-4 w-4"></button>
@@ -61,7 +63,14 @@
                     `;
                 });
             }else{
-                taskList.innerHTML += `<p class="px-4 mt-4 text-md font-semibold ">No Data</p>`
+                taskList.innerHTML += `
+                    <div class="flex justify-start px-4 gap-2 mt-3 bg-white rounded-lg p-2">
+                        <div class="w-1/4">
+                            <input type="checkbox" name="" id="" class="hidden">
+                            <label class="cursor-pointer task" for="" data-id="">No Data</label>
+                        </div>
+                    </div>
+                `;
             }
             loadEvent();
         }
@@ -74,11 +83,16 @@
                 task.addEventListener('click',function(){
                     id = task.getAttribute('data-id');
                     checkTask = document.querySelector(`#list-${id}`);
+                    
                     if (checkTask.checked) {
+                        console.log([id,dataTask.find(element => element.key == id).key])
+                        dataTask.find(element => element.key == id).completed = false;
                         task.classList.remove('line-through');
                     } else{
+                        dataTask.find(element => element.key == id).completed = true;
                         task.classList.add('line-through');
                     }
+                    loadData(dataTask)
                 })
             });
 
@@ -88,12 +102,12 @@
                 btn.addEventListener('click',function(){
                     id = btn.getAttribute('data-id');
                     index = dataTask.findIndex(task => task.key == id);
-                    console.log(index)
-                    dataTask.splice(index - 1, 1)
+                    dataTask.splice(index, 1)
                     loadData(dataTask)
                 });
             });
         }
+
     </script>
 </body>
 </html>
